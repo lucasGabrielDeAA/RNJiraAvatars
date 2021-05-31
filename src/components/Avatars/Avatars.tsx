@@ -1,17 +1,20 @@
-import React, { FC, useCallback, useMemo } from 'react';
-import { TouchableOpacity, Image } from 'react-native';
-import { useTheme } from '@react-navigation/native';
+import React, { FC, useCallback, useMemo } from "react";
+import { TouchableOpacity, Image } from "react-native";
+import { useTheme } from "@react-navigation/native";
 
-import { Column, Row, Text, ColumnProps as RowProps } from 'src/components';
+import { Column, Row, Text, ColumnProps as RowProps } from "src/components";
 
 type AvatarType = {
   id: number;
   avatar_url: string;
 };
 
-interface AvatarsProps extends RowProps {
+interface AvatarsProps
+  extends RowProps,
+    Omit<RowProps, "alignItems">,
+    Omit<RowProps, "backgroundColor">,
+    Omit<RowProps, "justifyContent"> {
   data: AvatarType[];
-  callToAction?(): void;
   imageSize?: number;
   imageRadius?: number;
   showBorder?: boolean;
@@ -23,7 +26,7 @@ const IMAGE_DISTANCE = 12;
 
 const Avatars: FC<AvatarsProps> = ({
   data,
-  callToAction,
+  onPress,
   imageSize = 50,
   borderColor,
   ...rest
@@ -31,8 +34,8 @@ const Avatars: FC<AvatarsProps> = ({
   const { colors } = useTheme();
 
   const generateRandomColor = useCallback(() => {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
+    const letters = "0123456789ABCDEF";
+    let color = "#";
 
     for (let index = 0; index < 6; index++) {
       color += letters[Math.floor(Math.random() * 16)];
@@ -55,57 +58,57 @@ const Avatars: FC<AvatarsProps> = ({
 
   return (
     <Row
-      alignItems='center'
+      alignItems="center"
       as={TouchableOpacity}
-      backgroundColor='transparent'
-      justifyContent='center'
+      backgroundColor="transparent"
+      justifyContent="center"
       my={5}
-      onPress={callToAction ? () => callToAction() : () => {}}
+      onPress={onPress ? () => onPress() : () => {}}
       {...rest}
     >
       <>
         {data.slice(0, lastIndex).map((item, index) => (
           <Column
-            alignItems='center'
+            alignItems="center"
             backgroundColor={colors.secondary}
             borderColor={borderColor ? borderColor : color}
             borderRadius={imageSize / 2}
             borderWidth={2.8}
             height={imageSize}
             key={index}
-            justifyContent='center'
+            justifyContent="center"
             marginLeft={index !== data.length ? `-${IMAGE_DISTANCE}px` : 0}
-            overflow='hidden'
+            overflow="hidden"
             width={imageSize}
             zIndex={data.length - index}
           >
             <Image
               source={{
-                uri: item.avatar_url
+                uri: item.avatar_url,
               }}
               style={{
                 borderRadius: imageSize / 2,
                 height: imageSize,
-                width: imageSize
+                width: imageSize,
               }}
             />
           </Column>
         ))}
 
         <Column
-          alignItems='center'
+          alignItems="center"
           backgroundColor={colors.gray.n300}
           borderColor={borderColor ? borderColor : color}
           borderRadius={imageSize / 2}
           borderWidth={2.8}
           height={imageSize}
-          justifyContent='center'
+          justifyContent="center"
           marginLeft={`-${IMAGE_DISTANCE}px`}
-          overflow='hidden'
+          overflow="hidden"
           width={imageSize}
           zIndex={1}
         >
-          <Text variant='small'>{label}</Text>
+          <Text variant="small">{label}</Text>
         </Column>
       </>
     </Row>
