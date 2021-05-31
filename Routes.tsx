@@ -8,7 +8,7 @@ import { Home } from 'src/screens';
 import { theme } from 'src/theme';
 
 const ScreenOptions = () => ({
-  cardStyle: { backgroundColor: theme.colors.gray.n400 },
+  cardStyle: { backgroundColor: theme.colors.secondary },
   headerShown: false
 });
 
